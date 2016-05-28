@@ -3,21 +3,26 @@ class WelcomeController < ApplicationController
 
   def index 
     hashtag_subject = "#" + params["tweet"]
-    # this is getting based on subject, need to work on logic of sorting for correct subject that is returned.
+
     @tweets =  $twitter_client.search("#{hashtag_subject} -rt", lang: "en").take(10)
 
-    check_for_updates(@tweets, params["tweet"])
-      respond_to do |format|
+    check_or_create_tweets(@tweets, params["tweet"])
+    respond_to do |format|
 
-        format.json { render json: { tweets: @tweets } }
-      end
+      format.json { render json: { tweets: @tweets } }
+    end
   end
 
 
   private
 
-  def check_for_updates(tweets, tweet_subject)
+  def tweet_params
+    params.require(:tweet).permit(:subject)
+  end
+
+  def check_or_create_tweets(tweets, tweet_subject)
     existing_tweets = Tweet.where(tweet_subject: tweet_subject).last(10) if existing_tweets
+
     if !existing_tweets
       tweets.each do |tweet|
         Tweet.create(tweet_text: tweet.text, tweet_subject: tweet_subject, tweet_id: tweet.id, tweet_created_at: tweet.created_at,)
@@ -27,15 +32,10 @@ class WelcomeController < ApplicationController
 
     if existing_tweets && tweets[-1].created_at > existing_tweets[0].created_at || existing_tweets.count < 10 
       tweets.each do |tweet|
-        puts "There are new tweets to create!"
         Tweet.create(tweet_text: tweet.text, tweet_subject: tweet_subject, tweet_id: tweet.id, tweet_created_at: tweet.created_at,)
       end
     end
     @tweets = Tweet.where(tweet_subject: tweet_subject).last(10)
   end
-
-
-  def tweet_params
-    params.require(:tweet).permit(:subject)
-  end
 end
+

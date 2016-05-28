@@ -1,24 +1,23 @@
-
 default: &default
-  adapter: postgresql
-  encoding: unicode
+  adapter: mysql2
+  encoding: utf8
 
   pool: 5
 
 development:
   <<: *default
-  database: twitter_micro_development
+  database: twitter_development
 
 
 test:
   <<: *default
-  database: twitter_micro_test
+  database: twitter_test
 
 
 production:
   <<: *default
-  database: twitter_micro_production
+  database: twitter_production
   host: localhost
   # url: <%= ENV["DATABASE_URL"] %>
-  username: <%= ENV["DATABASE_USER"] %>
-  password: <%= ENV["DATABASE_PASSWORD"] %>
+  username: 
+  password:
