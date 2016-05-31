@@ -21,20 +21,11 @@ class WelcomeController < ApplicationController
   end
 
   def check_or_create_tweets(tweets, tweet_subject)
-    existing_tweets = Tweet.where(tweet_subject: tweet_subject).last(10) if existing_tweets
 
-    if !existing_tweets
-      tweets.each do |tweet|
-        Tweet.create(tweet_text: tweet.text, tweet_subject: tweet_subject, tweet_id: tweet.id, tweet_created_at: tweet.created_at,)
-      end
-      existing_tweets = Tweet.where(tweet_subject: tweet_subject).last(10)
+    tweets.each do |tweet|
+      Tweet.where(tweet_text: tweet.text, tweet_subject: tweet_subject, tweet_id: tweet.id, tweet_created_at: tweet.created_at).first_or_create
     end
 
-    if existing_tweets && tweets[-1].created_at > existing_tweets[0].created_at || existing_tweets.count < 10 
-      tweets.each do |tweet|
-        Tweet.create(tweet_text: tweet.text, tweet_subject: tweet_subject, tweet_id: tweet.id, tweet_created_at: tweet.created_at,)
-      end
-    end
     @tweets = Tweet.where(tweet_subject: tweet_subject).last(10)
   end
 end
