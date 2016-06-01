@@ -9,7 +9,7 @@ Ruby 2.1.5
 This project depends on the Twitter api.  The initializer file for the Twitter api requires a consumer key and secret key, which is provided by Twitter.  You will need to register your application with Twitter at the [Twitter application page](https://apps.twitter.com/).  [This article](http://iag.me/socialmedia/how-to-create-a-twitter-app-in-8-easy-steps/) describes the app registering process very clearly.
 
 ## Configuration
-To set up the application run `script/setup.sh`.  This will install the gems and create development and test databases.
+To set up the application run `scripts/setup.sh`.  This will install the gems and create development and test databases.
 
 
 ## How to run the test suite
